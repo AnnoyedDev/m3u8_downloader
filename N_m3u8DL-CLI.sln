@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29215.179
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N_m3u8DL-CLI", "N_m3u8DL-CLI\N_m3u8DL-CLI.csproj", "{4FB61439-B738-46AC-B3AF-2BF72150D057}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N_m3u8DL-CLI-GUI", "N_m3u8DL-CLI-GUI\N_m3u8DL-CLI-GUI.csproj", "{527FA325-6ECD-40FB-A108-8C2747AE6BCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4FB61439-B738-46AC-B3AF-2BF72150D057}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FB61439-B738-46AC-B3AF-2BF72150D057}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FB61439-B738-46AC-B3AF-2BF72150D057}.Release|Any CPU.Build.0 = Release|Any CPU
+		{527FA325-6ECD-40FB-A108-8C2747AE6BCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{527FA325-6ECD-40FB-A108-8C2747AE6BCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{527FA325-6ECD-40FB-A108-8C2747AE6BCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{527FA325-6ECD-40FB-A108-8C2747AE6BCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
