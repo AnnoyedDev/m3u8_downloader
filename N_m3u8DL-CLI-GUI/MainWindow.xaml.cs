@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,22 +9,13 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Web.UI.HtmlControls;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using Application = System.Windows.Application;
-using Button = System.Windows.Controls.Button;
 using Clipboard = System.Windows.Clipboard;
 using DataFormats = System.Windows.DataFormats;
 using DragDropEffects = System.Windows.DragDropEffects;
@@ -127,6 +119,8 @@ namespace N_m3u8DL_CLI_GUI
 
             StringBuilder sb = new StringBuilder();
             sb.Append("\"" + TextBox_URL.Text + "\" ");
+            if (!string.IsNullOrEmpty(TextBox_Title.Text))
+                sb.Append("--saveName \"" + TextBox_Title.Text + "\" ");
             if (!string.IsNullOrEmpty(TextBox_WorkDir.Text))
             {
                 if (TextBox_WorkDir.Text.Trim('\\').EndsWith(":")) //根目录
@@ -138,8 +132,6 @@ namespace N_m3u8DL_CLI_GUI
                     sb.Append("--workDir \"" + TextBox_WorkDir.Text.Trim('\\') + "\" ");
                 }
             }
-            if (!string.IsNullOrEmpty(TextBox_Title.Text))
-                sb.Append("--saveName \"" + TextBox_Title.Text + "\" ");
             if (!string.IsNullOrEmpty(TextBox_Headers.Text))
                 sb.Append("--headers \"" + TextBox_Headers.Text + "\" ");
             if (!string.IsNullOrEmpty(TextBox_Baseurl.Text))
@@ -154,7 +146,7 @@ namespace N_m3u8DL_CLI_GUI
                 sb.Append("--retryCount \"" + TextBox_Retry.Text + "\" ");
             if (TextBox_Timeout.Text != "10")
                 sb.Append("--timeOut \"" + TextBox_Timeout.Text + "\" ");
-            if (TextBox_StopSpeed.Text != "0") 
+            if (TextBox_StopSpeed.Text != "0")
                 sb.Append("--stopSpeed \"" + TextBox_StopSpeed.Text + "\" ");
             if (TextBox_MaxSpeed.Text != "0")
                 sb.Append("--maxSpeed \"" + TextBox_MaxSpeed.Text + "\" ");
@@ -173,7 +165,7 @@ namespace N_m3u8DL_CLI_GUI
             {
                 sb.Append("--proxyAddress \"" + TextBox_Proxy.Text.Trim() + "\" ");
             }
-            if (CheckBox_Del.IsChecked == true) 
+            if (CheckBox_Del.IsChecked == true)
                 sb.Append("--enableDelAfterDone ");
             if (CheckBox_FastStart.IsChecked == true)
                 sb.Append("--enableMuxFastStart ");
@@ -191,7 +183,7 @@ namespace N_m3u8DL_CLI_GUI
                 sb.Append("--disableIntegrityCheck ");
             if (CheckBox_AudioOnly.IsChecked == true)
                 sb.Append("--enableAudioOnly ");
-            if (TextBox_RangeStart.Text!="00:00:00"|| TextBox_RangeEnd.Text != "00:00:00")
+            if (TextBox_RangeStart.Text != "00:00:00" || TextBox_RangeEnd.Text != "00:00:00")
             {
                 sb.Append($"--downloadRange \"{TextBox_RangeStart.Text}-{TextBox_RangeEnd.Text}\"");
             }
@@ -206,7 +198,7 @@ namespace N_m3u8DL_CLI_GUI
 
         private void CheckBoxChanged(object sender, RoutedEventArgs e)
         {
-            if (((System.Windows.Controls.CheckBox)sender).IsChecked == true) 
+            if (((System.Windows.Controls.CheckBox)sender).IsChecked == true)
             {
                 ((System.Windows.Controls.CheckBox)sender).Foreground = new SolidColorBrush(Color.FromRgb(46, 204, 113));
             }
@@ -284,7 +276,7 @@ namespace N_m3u8DL_CLI_GUI
                 if (url.StartsWith("http"))
                     url = url.Replace("http://", "").Replace("https://", "");
                 //从爱奇艺dash接口获取内容
-                if (url.Contains("dash") && (url.StartsWith("cache.video.iqiyi.com") || url.StartsWith("intel-cache.video.iqiyi.com"))) 
+                if (url.Contains("dash") && (url.StartsWith("cache.video.iqiyi.com") || url.StartsWith("intel-cache.video.iqiyi.com")))
                 {
                     string tvid = GetQueryString("tvid", url);
                     string webSource = GetWebSource($"https://pcw-api.iqiyi.com/video/video/baseinfo/{tvid}");
@@ -773,7 +765,7 @@ namespace N_m3u8DL_CLI_GUI
             if (!File.Exists(TextBox_EXE.Text))//尝试寻找主程序
             {
                 DirectoryInfo d = new DirectoryInfo(Environment.CurrentDirectory);
-                foreach (FileInfo fi in d.GetFiles().Reverse()) 
+                foreach (FileInfo fi in d.GetFiles().Reverse())
                 {
                     if (fi.Extension.ToUpper() == ".exe".ToUpper() && fi.Name.StartsWith("N_m3u8DL-CLI_"))
                     {
@@ -815,7 +807,8 @@ namespace N_m3u8DL_CLI_GUI
             {
                 TextBox_Key.Text = Convert.ToBase64String(HexStringToBytes(TextBox_Key.Text));
             }
-            catch(Exception) {
+            catch (Exception)
+            {
 
             }
             if (!File.Exists(TextBox_EXE.Text))
@@ -835,7 +828,7 @@ namespace N_m3u8DL_CLI_GUI
             }
 
             //批量
-            if ((!TextBox_URL.Text.StartsWith("http") && TextBox_URL.Text.EndsWith(".txt") && File.Exists(TextBox_URL.Text))
+            if ((!TextBox_URL.Text.StartsWith("http") && (TextBox_URL.Text.EndsWith(".txt") || TextBox_URL.Text.EndsWith(".json")) && File.Exists(TextBox_URL.Text))
                 || Directory.Exists(TextBox_URL.Text))
             {
                 this.IsEnabled = false;
@@ -870,6 +863,69 @@ namespace N_m3u8DL_CLI_GUI
                         Encoding.Default);
                     Process.Start(bat);
                 }
+                else if (TextBox_URL.Text.EndsWith(".json"))
+                {
+                    //默认目录
+                    if (string.IsNullOrWhiteSpace(TextBox_WorkDir.Text) || !Directory.Exists(TextBox_WorkDir.Text))
+                    {
+                        TextBox_WorkDir.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    }
+                    var tmpWorkDir = TextBox_WorkDir.Text;
+                    //json文件名作为下载的小目录
+                    if (Path.GetFileNameWithoutExtension(TextBox_URL.Text) != Path.GetFileName(TextBox_WorkDir.Text))
+                    {
+                        TextBox_WorkDir.Text = Path.Combine(TextBox_WorkDir.Text, Path.GetFileNameWithoutExtension(TextBox_URL.Text));
+                        if (!Directory.Exists(TextBox_WorkDir.Text))
+                        {
+                            Directory.CreateDirectory(TextBox_WorkDir.Text);
+                        }
+                    }
+                    if (!File.Exists(TextBox_URL.Text))
+                    {
+                        MessageBox.Show($"路径不正确的json文件：{TextBox_URL.Text}");
+                        Button_GO.Content = "GO";
+                        IsEnabled = true;
+                        return;
+                    }
+                    var jsonStr = File.ReadAllText(TextBox_URL.Text);
+                    if (string.IsNullOrWhiteSpace(jsonStr))
+                    {
+                        MessageBox.Show($"空的json文件：{TextBox_URL.Text}");
+                        Button_GO.Content = "GO";
+                        IsEnabled = true;
+                        return;
+                    }
+                    Dictionary<string, string> json = new Dictionary<string, string>();
+                    try
+                    {
+                        json = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonStr);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"格式不正确的json文件：{TextBox_URL.Text}\n{ex.Message}");
+                        Button_GO.Content = "GO";
+                        IsEnabled = true;
+                        return;
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("@echo off");
+                    sb.AppendLine("::Created by N_m3u8DL-CLI-GUI");
+                    //sb.AppendLine("chcp 65001 >nul");
+                    int i = 0;
+                    var fileName = string.Empty;
+                    var parameter = TextBox_Parameter.Text.Remove(0, TextBox_Parameter.Text.IndexOf("--workDir"));
+                    var str = $"TITLE \"[{{0}}/{json.Count}] - {{1}}\"{Environment.NewLine}\"{exePath}\" \"{{2}}\" --saveName \"{{1}}\" {parameter}";
+                    foreach (var item in json)
+                    {
+                        fileName = item.Value.TrimStart(new char[] { '#', ' ' });
+                        sb.AppendLine(string.Format(str, ++i, fileName, item.Key.Replace("%", "%%")));
+                    }
+                    //sw.WriteLine("del %0");
+                    string batPath = "Batch-" + DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss") + ".bat";
+                    File.WriteAllText(batPath, sb.ToString(), Encoding.Default);
+                    TextBox_WorkDir.Text = tmpWorkDir;
+                    Process.Start(batPath);
+                }
                 else
                 {
                     m3u8list = File.ReadAllLines(inputUrl, GetType(inputUrl)).ToList();
@@ -878,6 +934,7 @@ namespace N_m3u8DL_CLI_GUI
                     sb.AppendLine("::Created by N_m3u8DL-CLI-GUI");
                     //sb.AppendLine("chcp 65001 >nul");
                     int i = 0;
+                    var tmpTitle = TextBox_Title.Text;
                     foreach (var item in m3u8list)
                     {
                         if (item.Trim() != "")
@@ -897,14 +954,12 @@ namespace N_m3u8DL_CLI_GUI
                             }
                         }
                     }
+                    TextBox_Title.Text = tmpTitle;
                     //sb.AppendLine("del %0");
                     string bat = "Batch-" + DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss") + ".bat";
-                    File.WriteAllText(bat,
-                        sb.ToString(),
-                        Encoding.Default);
+                    File.WriteAllText(bat, sb.ToString(), Encoding.Default);
                     Process.Start(bat);
                 }
-
                 Button_GO.Content = "GO";
                 this.IsEnabled = true;
             }
@@ -930,7 +985,7 @@ namespace N_m3u8DL_CLI_GUI
 
         private void SetTopMost(object sender, RoutedEventArgs e)
         {
-            if (CheckBox_TopMost.IsChecked == true) 
+            if (CheckBox_TopMost.IsChecked == true)
             {
                 Topmost = true;
             }
