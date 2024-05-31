@@ -870,11 +870,12 @@ namespace N_m3u8DL_CLI_GUI
                     {
                         TextBox_WorkDir.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                     }
-                    var tmpWorkDir = TextBox_WorkDir.Text;
                     //json文件名作为下载的小目录
-                    if (Path.GetFileNameWithoutExtension(TextBox_URL.Text) != Path.GetFileName(TextBox_WorkDir.Text))
+                    var tmpWorkDir = TextBox_WorkDir.Text;
+                    var dir = Path.GetFileNameWithoutExtension(TextBox_URL.Text);
+                    if (dir != Path.GetFileName(TextBox_WorkDir.Text))
                     {
-                        TextBox_WorkDir.Text = Path.Combine(TextBox_WorkDir.Text, Path.GetFileNameWithoutExtension(TextBox_URL.Text));
+                        TextBox_WorkDir.Text = Path.Combine(TextBox_WorkDir.Text, dir);
                         if (!Directory.Exists(TextBox_WorkDir.Text))
                         {
                             Directory.CreateDirectory(TextBox_WorkDir.Text);
@@ -914,7 +915,8 @@ namespace N_m3u8DL_CLI_GUI
                     int i = 0;
                     var fileName = string.Empty;
                     var parameter = TextBox_Parameter.Text.Remove(0, TextBox_Parameter.Text.IndexOf("--workDir"));
-                    var str = $"TITLE \"[{{0}}/{json.Count}] - {{1}}\"{Environment.NewLine}\"{exePath}\" \"{{2}}\" --saveName \"{{1}}\" {parameter}";
+                    var str = $"TITLE {dir}[{{0}}/{json.Count}] - {{1}}{Environment.NewLine}\"{exePath}\" \"{{2}}\" --saveName \"{{1}}\" {parameter}";
+                    TextBox_WorkDir.Text = tmpWorkDir;
                     foreach (var item in json)
                     {
                         fileName = item.Value.TrimStart(new char[] { '#', ' ' });
@@ -923,7 +925,6 @@ namespace N_m3u8DL_CLI_GUI
                     //sw.WriteLine("del %0");
                     string batPath = "Batch-" + DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss") + ".bat";
                     File.WriteAllText(batPath, sb.ToString(), Encoding.Default);
-                    TextBox_WorkDir.Text = tmpWorkDir;
                     Process.Start(batPath);
                 }
                 else

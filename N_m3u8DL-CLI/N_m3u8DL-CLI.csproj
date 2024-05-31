@@ -56,6 +56,9 @@
   <PropertyGroup>
     <ApplicationIcon>logo_3Iv_icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>N_m3u8DL_CLI.NetCore.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BrotliSharpLib, Version=0.3.2.0, Culture=neutral, PublicKeyToken=3f4e2a1cd615fcb7, processorArchitecture=MSIL">
       <HintPath>..\packages\BrotliSharpLib.0.3.3\lib\net451\BrotliSharpLib.dll</HintPath>

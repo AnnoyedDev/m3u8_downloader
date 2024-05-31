@@ -35,7 +35,8 @@ namespace N_m3u8DL_CLI
         /*===============================================================================*/
         static Version ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         static string nowVer = $"{ver.Major}.{ver.Minor}.{ver.Build}";
-        static string nowDate = DateTime.Now.ToString("yyyyMMdd");
+        static string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        static string nowDate = File.GetCreationTime(exePath).ToString("yyyy-MM-dd");
         public static void WriteInit()
         {
             Console.WriteLine($"m3u8_cli version {nowVer}  built date: {nowDate}");
@@ -91,9 +92,9 @@ namespace N_m3u8DL_CLI
         // parseInt(s, radix)
         public static int GetNum(string str, int numBase)
         {
-            return Convert.ToInt32(Microsoft.JScript.GlobalObject.parseInt(str, numBase)); 
+            return Convert.ToInt32(Microsoft.JScript.GlobalObject.parseInt(str, numBase));
         }
-        
+
         // 统一设置代理
         // 替换 else if (UseProxyAddress != "") {
         //      WebProxy proxy = new WebProxy(UseProxyAddress);
@@ -280,7 +281,7 @@ namespace N_m3u8DL_CLI
         //  string ext 文件类型的扩展名，如".txt" , “.exe"
         public static int GetFileCount(string dir, string ext)
         {
-            if (!Directory.Exists(dir)) 
+            if (!Directory.Exists(dir))
                 return 0;
 
             int count = 0;
@@ -294,7 +295,7 @@ namespace N_m3u8DL_CLI
             }
             return count;
         }
-        
+
         /// <summary>
         /// 寻找指定目录下指定后缀的文件的详细路径 如".txt"
         /// </summary>
@@ -354,7 +355,7 @@ namespace N_m3u8DL_CLI
             string[][] li = Enumerable.Range(0, files.Count() / div + 1).Select(x => files.Skip(x * div).Take(div).ToArray()).ToArray();
             foreach (var items in li)
             {
-                if (items.Count() == 0) 
+                if (items.Count() == 0)
                     continue;
                 CombineMultipleFilesIntoSingleFile(items, outputName + index.ToString("0000") + ".ts");
                 //合并后删除这些文件
@@ -406,7 +407,7 @@ namespace N_m3u8DL_CLI
             }
             //Global.ExplorerFile(outputFilePath);
         }
-        
+
 
 
         /// <summary>
@@ -591,7 +592,7 @@ namespace N_m3u8DL_CLI
         public static void HttpDownloadFile(string url, string path, int timeOut = 20000, string headers = "", long startByte = 0, long expectByte = -1)
         {
             int retry = 0;
-            reDownload:
+        reDownload:
             try
             {
                 if (File.Exists(path))
@@ -811,12 +812,12 @@ namespace N_m3u8DL_CLI
         public static string GetTagAttribute(string attributeList, string key)
         {
             /*#EXT-X-STREAM-INF:PROGRAM-ID=1,RESOLUTION=1056x594,BANDWIDTH=1963351,CODECS="mp4a.40.5,avc1.4d001f",FRAME-RATE=30.000,AUDIO="aac",AVERAGE-BANDWIDTH=1655131*/
-            if (attributeList != "") 
+            if (attributeList != "")
             {
                 try
                 {
                     string tmp = attributeList.Trim();
-                    if (tmp.Contains(key + "=")) 
+                    if (tmp.Contains(key + "="))
                     {
                         if (tmp[tmp.IndexOf(key + "=") + key.Length + 1] == '\"')
                         {
@@ -902,7 +903,7 @@ namespace N_m3u8DL_CLI
                     .Replace(RegexFind(@" \(\[.*?\)", s)[0].ToString(), "")
                     .Replace(": ", " ");
 
-                if (VIDEO_TYPE == "" && res.Contains(": Video")) 
+                if (VIDEO_TYPE == "" && res.Contains(": Video"))
                 {
                     if (res.Contains("Video dvvideo"))  //爱奇艺杜比视界
                     {
@@ -957,11 +958,11 @@ namespace N_m3u8DL_CLI
                     FFmpeg.UseAACFilter = false;
                 }
 
-                if ((VIDEO_TYPE == "" || VIDEO_TYPE == "IGNORE") && res.Contains("Audio eac3")) 
+                if ((VIDEO_TYPE == "" || VIDEO_TYPE == "IGNORE") && res.Contains("Audio eac3"))
                 {
                     AUDIO_TYPE = "eac3";
                 }
-                else if((VIDEO_TYPE == "" || VIDEO_TYPE == "IGNORE") && res.Contains("Audio aac"))
+                else if ((VIDEO_TYPE == "" || VIDEO_TYPE == "IGNORE") && res.Contains("Audio aac"))
                 {
                     AUDIO_TYPE = "aac";
                 }
@@ -1183,7 +1184,7 @@ namespace N_m3u8DL_CLI
 
             public WebClientEx()
             {
-                
+
             }
 
             public WebClientEx(long from, long to)

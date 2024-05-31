@@ -20,7 +20,7 @@ using Microsoft.Win32;
 
 namespace N_m3u8DL_CLI.NetCore
 {
-    class Program
+    public class Program
     {
         public delegate bool ControlCtrlDelegate(int CtrlType);
         [DllImport("kernel32.dll")]
