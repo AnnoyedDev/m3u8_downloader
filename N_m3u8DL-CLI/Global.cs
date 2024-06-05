@@ -36,7 +36,7 @@ namespace N_m3u8DL_CLI
         static Version ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         static string nowVer = $"{ver.Major}.{ver.Minor}.{ver.Build}";
         static string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-        static string nowDate = File.GetCreationTime(exePath).ToString("yyyy-MM-dd");
+        static string nowDate = File.GetCreationTime(exePath).ToString("yyyy-M-d");
         public static void WriteInit()
         {
             Console.WriteLine($"m3u8_cli version {nowVer}  built date: {nowDate}");

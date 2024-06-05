@@ -848,7 +848,7 @@ namespace N_m3u8DL_CLI_GUI
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("@echo off");
                     sb.AppendLine("::Created by N_m3u8DL-CLI-GUI\r\n");
-                    //sb.AppendLine("chcp 65001 >nul");
+                    sb.AppendLine("chcp 65001 >nul");
                     int i = 0;
                     foreach (var item in m3u8list)
                     {
@@ -856,11 +856,10 @@ namespace N_m3u8DL_CLI_GUI
                         sb.AppendLine($"TITLE \"[{++i}/{m3u8list.Count}] - {TextBox_Title.Text}\"");
                         sb.AppendLine("\"" + exePath + "\" \"" + item.Replace("%", "%%") + "\" " + TextBox_Parameter.Text.Remove(0, TextBox_Parameter.Text.IndexOf("\" ") + 2));
                     }
+                    sb.AppendLine("pause");
                     //sb.AppendLine("del %0");
                     string bat = "Batch-" + DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss") + ".bat";
-                    File.WriteAllText(bat,
-                        sb.ToString(),
-                        Encoding.Default);
+                    File.WriteAllText(bat, sb.ToString(), Encoding.UTF8);
                     Process.Start(bat);
                 }
                 else if (TextBox_URL.Text.EndsWith(".json"))
@@ -911,7 +910,7 @@ namespace N_m3u8DL_CLI_GUI
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("@echo off");
                     sb.AppendLine("::Created by N_m3u8DL-CLI-GUI");
-                    //sb.AppendLine("chcp 65001 >nul");
+                    sb.AppendLine("chcp 65001 >nul");
                     int i = 0;
                     var fileName = string.Empty;
                     var parameter = TextBox_Parameter.Text.Remove(0, TextBox_Parameter.Text.IndexOf("--workDir"));
@@ -922,9 +921,10 @@ namespace N_m3u8DL_CLI_GUI
                         fileName = item.Value.TrimStart(new char[] { '#', ' ' });
                         sb.AppendLine(string.Format(str, ++i, fileName, item.Key.Replace("%", "%%")));
                     }
+                    sb.AppendLine("pause");
                     //sw.WriteLine("del %0");
                     string batPath = "Batch-" + DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss") + ".bat";
-                    File.WriteAllText(batPath, sb.ToString(), Encoding.Default);
+                    File.WriteAllText(batPath, sb.ToString(), Encoding.UTF8);
                     Process.Start(batPath);
                 }
                 else
@@ -933,7 +933,7 @@ namespace N_m3u8DL_CLI_GUI
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("@echo off");
                     sb.AppendLine("::Created by N_m3u8DL-CLI-GUI");
-                    //sb.AppendLine("chcp 65001 >nul");
+                    sb.AppendLine("chcp 65001 >nul");
                     int i = 0;
                     var tmpTitle = TextBox_Title.Text;
                     foreach (var item in m3u8list)
@@ -955,10 +955,11 @@ namespace N_m3u8DL_CLI_GUI
                             }
                         }
                     }
+                    sb.AppendLine("pause");
                     TextBox_Title.Text = tmpTitle;
                     //sb.AppendLine("del %0");
                     string bat = "Batch-" + DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss") + ".bat";
-                    File.WriteAllText(bat, sb.ToString(), Encoding.Default);
+                    File.WriteAllText(bat, sb.ToString(), Encoding.UTF8);
                     Process.Start(bat);
                 }
                 Button_GO.Content = "GO";
