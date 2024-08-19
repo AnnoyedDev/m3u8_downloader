@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Timers;
 
@@ -51,7 +48,7 @@ namespace N_m3u8DL_CLI
         private void UpdateList(object source, EventArgs e)
         {
             jsonFile = Path.Combine(DownDir, "meta.json");
-            if (!File.Exists(jsonFile)) 
+            if (!File.Exists(jsonFile))
             {
                 TimerStop();
                 return;
@@ -71,7 +68,7 @@ namespace N_m3u8DL_CLI
                 tempList.Add(seg.ToString());
             }
 
-            if(isFirstJson)
+            if (isFirstJson)
             {
                 toDownList = tempList;
                 isFirstJson = false;
@@ -117,7 +114,7 @@ namespace N_m3u8DL_CLI
 
         private void Record()
         {
-            while (toDownList.Count > 0 && (sd.FileUrl != "" ? sd.IsDone : true)) 
+            while (toDownList.Count > 0 && (sd.FileUrl != "" ? sd.IsDone : true))
             {
                 JObject info = JObject.Parse(toDownList[0].ToString());
                 int index = info["index"].Value<int>();

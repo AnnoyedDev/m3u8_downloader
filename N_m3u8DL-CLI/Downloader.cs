@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace N_m3u8DL_CLI
 {
@@ -47,7 +41,7 @@ namespace N_m3u8DL_CLI
         public long ExpectByte { get => expectByte; set => expectByte = value; }
         public long StartByte { get => startByte; set => startByte = value; }
         public double SegDur { get => segDur; set => segDur = value; }
-        
+
         public static bool EnableChaCha20 { get; set; } = false;
         public static string ChaCha20KeyBase64 { get; set; }
         public static string ChaCha20NonceBase64 { get; set; }
@@ -76,7 +70,7 @@ namespace N_m3u8DL_CLI
                 {
                     IsDone = false;  //设置为未完成下载
 
-                    if (Method == "NONE" || method.Contains("NOTSUPPORTED")) 
+                    if (Method == "NONE" || method.Contains("NOTSUPPORTED"))
                     {
                         LOGGER.PrintLine("<" + SegIndex + " Downloading>");
                         LOGGER.WriteLine("<" + SegIndex + " Downloading>");
@@ -120,7 +114,7 @@ namespace N_m3u8DL_CLI
                         //LOGGER.STOPLOG = true;  //停止记录日志
                     }
                     HLSLiveDownloader.REC_DUR += SegDur;
-                    if (HLSLiveDownloader.REC_DUR_LIMIT != -1 && HLSLiveDownloader.REC_DUR >= HLSLiveDownloader.REC_DUR_LIMIT) 
+                    if (HLSLiveDownloader.REC_DUR_LIMIT != -1 && HLSLiveDownloader.REC_DUR >= HLSLiveDownloader.REC_DUR_LIMIT)
                     {
                         LOGGER.PrintLine(strings.recordLimitReached, LOGGER.Warning);
                         LOGGER.WriteLine(strings.recordLimitReached);
@@ -180,7 +174,7 @@ namespace N_m3u8DL_CLI
                         Global.HttpDownloadFile(fileUrl, savePath, TimeOut, Headers, StartByte, ExpectByte);
                     }
                 }
-                if (File.Exists(savePath) && Global.ShouldStop == false) 
+                if (File.Exists(savePath) && Global.ShouldStop == false)
                 {
                     FileInfo fi = new FileInfo(savePath);
                     if (File.Exists(fi.FullName) && EnableChaCha20)
@@ -199,13 +193,13 @@ namespace N_m3u8DL_CLI
                         //Console.WriteLine(Path.GetFileNameWithoutExtension(savePath) + " Completed.");
                     }
                     else if (File.Exists(fi.FullName)
-                        && Method == "AES-128") 
+                        && Method == "AES-128")
                     {
                         //解密
                         try
                         {
                             byte[] decryptBuff = null;
-                            if(fileUrl.Contains(".51cto.com/")) //使用AES-128-ECB模式解密
+                            if (fileUrl.Contains(".51cto.com/")) //使用AES-128-ECB模式解密
                             {
                                 decryptBuff = Decrypter.AES128Decrypt(
                                     fi.FullName,
@@ -254,7 +248,7 @@ namespace N_m3u8DL_CLI
                     IsDone = true;
                     return;
                 }
-                else if (IsLive && count++ < Retry) 
+                else if (IsLive && count++ < Retry)
                 {
                     Thread.Sleep(2000);//直播一般3-6秒一个片段
                     Down();

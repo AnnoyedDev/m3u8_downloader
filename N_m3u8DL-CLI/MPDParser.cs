@@ -1,13 +1,10 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace N_m3u8DL_CLI
@@ -504,7 +501,7 @@ namespace N_m3u8DL_CLI
                                 for (int i = 0; i < formatList.Count; i++)
                                 {
                                     //参数相同但不在同一个Period才可以
-                                    if (formatList[i]["FormatId"] == f["FormatId"] && formatList[i]["Width"] == f["Width"] && formatList[i]["ContentType"] == f["ContentType"] && formatList[i]["PeriodIndex"] != f["PeriodIndex"]) 
+                                    if (formatList[i]["FormatId"] == f["FormatId"] && formatList[i]["Width"] == f["Width"] && formatList[i]["ContentType"] == f["ContentType"] && formatList[i]["PeriodIndex"] != f["PeriodIndex"])
                                     {
                                         formatList[i]["Fragments"].AddRange(f["Fragments"]);
                                         break;

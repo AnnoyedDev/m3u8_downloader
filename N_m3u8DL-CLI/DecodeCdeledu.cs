@@ -2,7 +2,6 @@
 using NiL.JS.Core;
 using NiL.JS.Extensions;
 using System;
-using Array = System.Array;
 
 namespace N_m3u8DL_CLI
 {

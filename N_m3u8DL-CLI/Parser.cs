@@ -193,7 +193,7 @@ namespace N_m3u8DL_CLI
             }
 
             //针对AppleTv修正
-            if (m3u8Content.Contains("#EXT-X-DISCONTINUITY") && m3u8Content.Contains("#EXT-X-MAP") && (M3u8Url.Contains(".apple.com/") || Regex.IsMatch(m3u8Content, "#EXT-X-MAP.*\\.apple\\.com/"))) 
+            if (m3u8Content.Contains("#EXT-X-DISCONTINUITY") && m3u8Content.Contains("#EXT-X-MAP") && (M3u8Url.Contains(".apple.com/") || Regex.IsMatch(m3u8Content, "#EXT-X-MAP.*\\.apple\\.com/")))
             {
                 //只取加密部分即可
                 Regex ykmap = new Regex("(#EXT-X-KEY:[\\s\\S]*?)(#EXT-X-DISCONTINUITY|#EXT-X-ENDLIST)");
@@ -976,7 +976,7 @@ namespace N_m3u8DL_CLI
 
 
             Uri uri1 = new Uri(baseurl);  //这里直接传完整的URL即可
-            Uri uri2 = new Uri(uri1, url);  
+            Uri uri2 = new Uri(uri1, url);
             ForceCanonicalPathAndQuery(uri2);  //兼容XP的低版本.Net
             url = uri2.ToString();
 
@@ -997,7 +997,7 @@ namespace N_m3u8DL_CLI
 
             return url;
         }
-        
+
         /// <summary>
         /// 从url中截取字符串充当baseurl
         /// </summary>

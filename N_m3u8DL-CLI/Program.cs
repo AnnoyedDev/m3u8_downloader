@@ -1,8 +1,8 @@
 ﻿using CommandLine;
 using CommandLine.Text;
+using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -16,7 +16,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Microsoft.Win32;
 
 namespace N_m3u8DL_CLI.NetCore
 {
